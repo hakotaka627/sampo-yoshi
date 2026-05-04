@@ -1,0 +1,17 @@
+{
+  "name": "マーメイド・クエスト",
+  "short_name": "マーメイド",
+  "description": "毎日のタスク達成をキャラクターが応援する習慣アプリ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#dff8f7",
+  "theme_color": "#0f91b8",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f91b8" />
+    <meta name="description" content="毎日のタスク達成をキャラクターが応援するマーメイド習慣アプリ" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>マーメイド・クエスト</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <img class="hero-image" src="assets/mermaids.png" alt="4人のマーメイド" />
+        <div class="hero-content">
+          <p class="eyebrow">毎日の小さな達成を、海の力に</p>
+          <h1>マーメイド・クエスト</h1>
+          <div class="hero-character">
+            <div id="selectedMermaidIcon" class="mermaid-fullbody hero-mermaid luna" aria-hidden="true"></div>
+            <div>
+              <small>いっしょに冒険するマーメイド</small>
+              <strong id="selectedMermaidName">ルナ</strong>
+            </div>
+          </div>
+          <div class="hero-stats" aria-label="今日の状況">
+            <div><span id="todayDone">0/0</span><small>今日の達成</small></div>
+            <div><span id="streakDays">0日</span><small>連続達成</small></div>
+            <div><span id="nextTask">--:--</span><small>次のミッション</small></div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel summary-panel" aria-label="報酬残高">
+          <div class="balance-card life"><span id="lifePt">0</span><small>ライフpt</small></div>
+          <div class="balance-card pearl"><span id="pearls">0</span><small>パール</small></div>
+          <div class="balance-card coin"><span id="coins">0</span><small>コイン</small></div>
+        </section>
+
+        <nav class="tab-bar" aria-label="画面切り替え">
+          <button class="tab active" data-tab="tasks">今日</button>
+          <button class="tab" data-tab="character">キャラ</button>
+          <button class="tab" data-tab="reflect">ふりかえり</button>
+          <button class="tab" data-tab="growth">成長</button>
+          <button class="tab" data-tab="settings">設定</button>
+        </nav>
+
+        <section id="tasks" class="screen active-screen">
+          <div class="section-heading">
+            <h2>今日のミッション</h2>
+            <p id="todayLabel"></p>
+          </div>
+          <div id="taskList" class="task-list"></div>
+        </section>
+
+        <section id="character" class="screen">
+          <div class="section-heading">
+            <h2>キャラクター設定</h2>
+            <p>今いっしょに冒険したいマーメイドを選びます。いつでも変更できます。</p>
+          </div>
+          <div id="mermaidList" class="mermaid-grid"></div>
+        </section>
+
+        <section id="reflect" class="screen">
+          <div class="section-heading">
+            <h2>今日のふりかえり</h2>
+            <p>三方よしで、今日のがんばりを意味づけます。</p>
+          </div>
+          <div class="reflection-card">
+            <div class="character-badge" id="reflectionCharacter">クラゲ博士</div>
+            <p id="reflectionText">今日のミッションを達成すると、ここにキャラクターからのアドバイスが出ます。</p>
+          </div>
+          <button class="primary-button" id="finishDayButton">今日をおしまいにする</button>
+        </section>
+
+        <section id="growth" class="screen">
+          <div class="section-heading">
+            <h2>成長グラフ</h2>
+            <p>達成したタスクから、伸びている力を見える化します。</p>
+          </div>
+          <div id="growthList" class="growth-list"></div>
+          <section class="settle-inline">
+            <h3>コイン精算</h3>
+            <div class="settle-card">
+              <div><small>今週コイン</small><strong id="weeklyCoins">0</strong></div>
+              <div><small>受け取る金額</small><strong id="yenAmount">0円</strong></div>
+              <div><small>貯金コイン</small><strong id="savedCoins">0</strong></div>
+            </div>
+            <div class="button-row">
+              <button class="primary-button" id="cashOutButton">今週もらう</button>
+              <button class="secondary-button" id="saveCoinButton">月末まで貯める</button>
+            </div>
+          </section>
+        </section>
+
+        <section id="settings" class="screen">
+          <div class="section-heading">
+            <h2>親設定</h2>
+            <p>試作版ではタスク追加、バックアップ保存、読み込みができます。</p>
+          </div>
+          <form id="taskForm" class="settings-form">
+            <label>タスク名<input name="name" required placeholder="例：ピアノ練習" /></label>
+            <label>曜日
+              <select name="day">
+                <option value="毎日">毎日</option><option value="月">月</option><option value="火">火</option><option value="水">水</option><option value="木">木</option><option value="金">金</option><option value="土">土</option><option value="日">日</option>
+              </select>
+            </label>
+            <label>開始時間<input name="time" type="time" value="17:00" /></label>
+            <label>成長カテゴリ
+              <select name="category">
+                <option>習慣力</option><option>思いやり</option><option>ひらめき</option><option>考える力</option><option>ふりかえり力</option><option>継続力</option><option>夢を描く力</option>
+              </select>
+            </label>
+            <label>担当キャラ
+              <select name="character">
+                <option>タコ先生</option><option>リッキー</option><option>フィーナ</option><option>クラゲ博士</option><option>お母さん</option><option>お父さん</option><option>王子様ノア</option>
+              </select>
+            </label>
+            <div class="reward-inputs">
+              <label>ライフpt<input name="life" type="number" min="0" value="10" /></label>
+              <label>パール<input name="pearl" type="number" min="0" value="5" /></label>
+              <label>コイン<input name="coin" type="number" min="0" value="1" /></label>
+            </div>
+            <button class="primary-button" type="submit">タスクを追加</button>
+          </form>
+
+          <div class="backup-box">
+            <h3>バックアップ</h3>
+            <p>スマホ内の記録をファイルに保存できます。保存したファイルはSDカードや外付けメモリーへ移せます。</p>
+            <div class="button-row">
+              <button class="secondary-button" id="exportButton" type="button">バックアップ保存</button>
+              <label class="file-button">バックアップ読込<input id="importFile" type="file" accept="application/json,.json" /></label>
+            </div>
+          </div>
+          <button class="danger-button" id="resetButton">試作データをリセット</button>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="rewardDialog" class="reward-dialog">
+      <div class="dialog-art"></div>
+      <h2 id="rewardTitle">ミッションクリア！</h2>
+      <p id="rewardMessage"></p>
+      <div id="rewardValues" class="reward-values"></div>
+      <button class="primary-button" id="closeDialog">次へ</button>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
