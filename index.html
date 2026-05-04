@@ -1,151 +1,47 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0f91b8" />
-    <meta name="description" content="毎日のタスク達成をキャラクターが応援するマーメイド習慣アプリ" />
-    <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css" />
-    <title>マーメイド・クエスト</title>
-  </head>
-  <body>
-    <div class="app-shell">
-      <header class="hero">
-        <img class="hero-image" src="assets/mermaids.png" alt="4人のマーメイド" />
-        <div class="hero-content">
-          <p class="eyebrow">毎日の小さな達成を、海の力に</p>
-          <h1>マーメイド・クエスト</h1>
-          <div class="hero-character">
-            <div id="selectedMermaidIcon" class="mermaid-fullbody hero-mermaid luna" aria-hidden="true"></div>
-            <div>
-              <small>いっしょに冒険するマーメイド</small>
-              <strong id="selectedMermaidName">ルナ</strong>
-            </div>
-          </div>
-          <div class="hero-stats" aria-label="今日の状況">
-            <div><span id="todayDone">0/0</span><small>今日の達成</small></div>
-            <div><span id="streakDays">0日</span><small>連続達成</small></div>
-            <div><span id="nextTask">--:--</span><small>次のミッション</small></div>
-          </div>
-        </div>
-      </header>
-
-      <main>
-        <section class="panel summary-panel" aria-label="報酬残高">
-          <div class="balance-card life"><span id="lifePt">0</span><small>ライフpt</small></div>
-          <div class="balance-card pearl"><span id="pearls">0</span><small>パール</small></div>
-          <div class="balance-card coin"><span id="coins">0</span><small>コイン</small></div>
-        </section>
-
-        <nav class="tab-bar" aria-label="画面切り替え">
-          <button class="tab active" data-tab="tasks">今日</button>
-          <button class="tab" data-tab="character">キャラ</button>
-          <button class="tab" data-tab="reflect">ふりかえり</button>
-          <button class="tab" data-tab="growth">成長</button>
-          <button class="tab" data-tab="settings">設定</button>
-        </nav>
-
-        <section id="tasks" class="screen active-screen">
-          <div class="section-heading">
-            <h2>今日のミッション</h2>
-            <p id="todayLabel"></p>
-          </div>
-          <div id="taskList" class="task-list"></div>
-        </section>
-
-        <section id="character" class="screen">
-          <div class="section-heading">
-            <h2>キャラクター設定</h2>
-            <p>今いっしょに冒険したいマーメイドを選びます。いつでも変更できます。</p>
-          </div>
-          <div id="mermaidList" class="mermaid-grid"></div>
-        </section>
-
-        <section id="reflect" class="screen">
-          <div class="section-heading">
-            <h2>今日のふりかえり</h2>
-            <p>三方よしで、今日のがんばりを意味づけます。</p>
-          </div>
-          <div class="reflection-card">
-            <div class="character-badge" id="reflectionCharacter">クラゲ博士</div>
-            <p id="reflectionText">今日のミッションを達成すると、ここにキャラクターからのアドバイスが出ます。</p>
-          </div>
-          <button class="primary-button" id="finishDayButton">今日をおしまいにする</button>
-        </section>
-
-        <section id="growth" class="screen">
-          <div class="section-heading">
-            <h2>成長グラフ</h2>
-            <p>達成したタスクから、伸びている力を見える化します。</p>
-          </div>
-          <div id="growthList" class="growth-list"></div>
-          <section class="settle-inline">
-            <h3>コイン精算</h3>
-            <div class="settle-card">
-              <div><small>今週コイン</small><strong id="weeklyCoins">0</strong></div>
-              <div><small>受け取る金額</small><strong id="yenAmount">0円</strong></div>
-              <div><small>貯金コイン</small><strong id="savedCoins">0</strong></div>
-            </div>
-            <div class="button-row">
-              <button class="primary-button" id="cashOutButton">今週もらう</button>
-              <button class="secondary-button" id="saveCoinButton">月末まで貯める</button>
-            </div>
-          </section>
-        </section>
-
-        <section id="settings" class="screen">
-          <div class="section-heading">
-            <h2>親設定</h2>
-            <p>試作版ではタスク追加、バックアップ保存、読み込みができます。</p>
-          </div>
-          <form id="taskForm" class="settings-form">
-            <label>タスク名<input name="name" required placeholder="例：ピアノ練習" /></label>
-            <label>曜日
-              <select name="day">
-                <option value="毎日">毎日</option><option value="月">月</option><option value="火">火</option><option value="水">水</option><option value="木">木</option><option value="金">金</option><option value="土">土</option><option value="日">日</option>
-              </select>
-            </label>
-            <label>開始時間<input name="time" type="time" value="17:00" /></label>
-            <label>成長カテゴリ
-              <select name="category">
-                <option>習慣力</option><option>思いやり</option><option>ひらめき</option><option>考える力</option><option>ふりかえり力</option><option>継続力</option><option>夢を描く力</option>
-              </select>
-            </label>
-            <label>担当キャラ
-              <select name="character">
-                <option>タコ先生</option><option>リッキー</option><option>フィーナ</option><option>クラゲ博士</option><option>お母さん</option><option>お父さん</option><option>王子様ノア</option>
-              </select>
-            </label>
-            <div class="reward-inputs">
-              <label>ライフpt<input name="life" type="number" min="0" value="10" /></label>
-              <label>パール<input name="pearl" type="number" min="0" value="5" /></label>
-              <label>コイン<input name="coin" type="number" min="0" value="1" /></label>
-            </div>
-            <button class="primary-button" type="submit">タスクを追加</button>
-          </form>
-
-          <div class="backup-box">
-            <h3>バックアップ</h3>
-            <p>スマホ内の記録をファイルに保存できます。保存したファイルはSDカードや外付けメモリーへ移せます。</p>
-            <div class="button-row">
-              <button class="secondary-button" id="exportButton" type="button">バックアップ保存</button>
-              <label class="file-button">バックアップ読込<input id="importFile" type="file" accept="application/json,.json" /></label>
-            </div>
-          </div>
-          <button class="danger-button" id="resetButton">試作データをリセット</button>
-        </section>
-      </main>
-    </div>
-
-    <dialog id="rewardDialog" class="reward-dialog">
-      <div class="dialog-art"></div>
-      <h2 id="rewardTitle">ミッションクリア！</h2>
-      <p id="rewardMessage"></p>
-      <div id="rewardValues" class="reward-values"></div>
-      <button class="primary-button" id="closeDialog">次へ</button>
-    </dialog>
-
-    <script src="app.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>マーメイド・クエスト</title>
+  <style>
+    :root{--sea:#0b7897;--aqua:#19a7bf;--ink:#173344;--muted:#66808d;--panel:rgba(255,255,255,.92);--line:rgba(9,89,118,.18)}
+    *{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:"Yu Gothic",Meiryo,system-ui,sans-serif;background:linear-gradient(#bff3f6,#fff4d8);min-height:100vh}button,input,select{font:inherit}button{border:0;cursor:pointer}h1,h2,h3,p{margin-top:0}.wrap{max-width:920px;margin:auto;padding:0 14px 28px}.hero{min-height:280px;margin:0 -14px 14px;padding:28px 16px 16px;color:white;background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.8),transparent 90px),linear-gradient(160deg,#35c0d7,#087393);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;position:relative}.hero:before{content:"";position:absolute;inset:auto -10% -28px;height:90px;background:radial-gradient(circle,#ffb0bb 0 13px,transparent 14px),radial-gradient(circle,#b7ead1 0 18px,transparent 19px);background-size:88px 60px;opacity:.65}.hero>*{position:relative}.eyebrow{font-weight:800;margin-bottom:6px}h1{font-size:34px;line-height:1.08;margin-bottom:12px}.hero-card,.stat,.card,.task,.reflect,.form,.backup{border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 10px 30px rgba(10,87,111,.12)}.hero-card{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;width:fit-content;max-width:100%;padding:10px 12px;color:var(--ink)}.stats,.balances,.tabs,.settle,.actions,.rewards,.reward-row{display:grid;gap:8px}.stats{grid-template-columns:repeat(3,1fr);margin-top:12px}.stat{padding:10px;color:var(--ink)}.stat span,.balance span,.settle strong{display:block;font-size:21px;font-weight:900}small{color:var(--muted);font-weight:800}.balances{grid-template-columns:repeat(3,1fr);margin-bottom:12px}.balance{border-radius:8px;background:white;padding:13px;border-top:4px solid #18a7bf}.balance:nth-child(2){border-color:#aa8de8}.balance:nth-child(3){border-color:#f0b84c}.tabs{position:sticky;top:0;z-index:5;grid-template-columns:repeat(5,1fr);padding:8px 0;background:rgba(223,248,247,.94);backdrop-filter:blur(8px)}.tab{min-height:42px;border-radius:8px;background:white;color:#073247;font-weight:900}.tab.active{background:#0b6f8f;color:white}.screen{display:none}.screen.active{display:block}.heading{margin:16px 0 12px}.heading p,.backup p{color:var(--muted);line-height:1.6}.task-list,.grid,.growth{display:grid;gap:10px}.task{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:14px}.task.done{opacity:.65}.task h3{margin-bottom:8px}.meta{display:flex;flex-wrap:wrap;gap:6px}.pill{padding:5px 8px;border-radius:999px;background:#e8f7f7;color:#25586a;font-size:12px;font-weight:900}.primary,.secondary,.danger,.filebtn{min-height:46px;border-radius:8px;padding:12px 14px;font-weight:900}.primary{color:white;background:linear-gradient(135deg,#0b6f8f,#18a5bd)}.secondary,.filebtn{background:#dff4f3;color:#073247}.danger{width:100%;margin-top:12px;background:#ffe3e8;color:#8f2436}.grid{grid-template-columns:repeat(2,1fr)}.card{padding:14px;border-top:5px solid #18a7bf}.card.selected{outline:3px solid rgba(24,165,189,.35)}.top{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}.reflect,.form,.backup{padding:14px}.badge{display:inline-flex;margin-bottom:10px;padding:7px 10px;border-radius:999px;background:#e8f7f7;color:#0b6f8f;font-weight:900}.reflect p{font-size:18px;line-height:1.8}.row{display:grid;grid-template-columns:90px 1fr 34px;gap:10px;align-items:center}.bar{height:16px;background:white;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#18a5bd,#47b98e)}.settle{grid-template-columns:repeat(3,1fr);padding:14px;margin-bottom:10px}.actions,.reward-row{grid-template-columns:1fr 1fr}label{display:grid;gap:6px;font-weight:900}input,select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:8px;padding:10px;background:white}.form{display:grid;gap:12px}.rewards{grid-template-columns:repeat(3,1fr)}.backup{margin-top:12px}.filebtn{display:grid;place-items:center;text-align:center}.filebtn input{position:absolute;width:1px;height:1px;opacity:0}.dialog{border:0;border-radius:8px;max-width:420px;width:92vw;padding:18px;box-shadow:0 22px 80px rgba(4,44,64,.28)}.dialog::backdrop{background:rgba(4,32,48,.45)}.reward-row div{padding:10px;border-radius:8px;background:#eefafa;text-align:center;font-weight:900}
+    .mermaid{width:96px;height:150px;position:relative;border-radius:8px;background:linear-gradient(#e7fbff,#fff);overflow:hidden}.mermaid.hero-m{width:64px;height:98px}.hair{position:absolute;left:22%;top:8%;width:56%;height:35%;border-radius:50% 50% 45% 45%;background:var(--hair)}.face{position:absolute;left:31%;top:18%;width:38%;height:25%;border-radius:50%;background:#ffd7c4}.body{position:absolute;left:36%;top:43%;width:28%;height:22%;border-radius:18px;background:var(--accent)}.tail{position:absolute;left:28%;top:60%;width:44%;height:32%;border-radius:45% 45% 15% 15%;background:var(--tail)}.fin{position:absolute;left:18%;bottom:4%;width:64%;height:22%;border-radius:50%;background:var(--tail);transform:rotate(-8deg)}.eye{position:absolute;top:28%;width:5px;height:5px;border-radius:50%;background:#173344}.eye.l{left:42%}.eye.r{right:42%}.smile{position:absolute;left:45%;top:34%;width:10%;height:6%;border-bottom:2px solid #173344;border-radius:50%}.miina{--hair:#ff8fa3;--tail:#ff8fa3;--accent:#fff0f3}.luna{--hair:#aa8de8;--tail:#aa8de8;--accent:#fff2a8}.leefa{--hair:#47b98e;--tail:#47b98e;--accent:#fff5c6}.selena{--hair:#2e73c6;--tail:#2e73c6;--accent:#f0b84c}
+    @media(max-width:560px){h1{font-size:30px}.hero{min-height:260px}.task,.grid{grid-template-columns:1fr}.tab{font-size:13px}.primary,.secondary{width:100%}.stats span,.balance span,.settle strong{font-size:18px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero"><p class="eyebrow">毎日の小さな達成を、海の力に</p><h1>マーメイド・クエスト</h1><div class="hero-card"><div id="heroMermaid" class="mermaid hero-m luna"></div><div><small>いっしょに冒険するマーメイド</small><strong id="heroName">ルナ</strong></div></div><div class="stats"><div class="stat"><span id="todayDone">0/0</span><small>今日の達成</small></div><div class="stat"><span id="streakDays">0日</span><small>連続達成</small></div><div class="stat"><span id="nextTask">--:--</span><small>次のミッション</small></div></div></header>
+  <main>
+    <section class="balances"><div class="balance"><span id="lifePt">0</span><small>ライフpt</small></div><div class="balance"><span id="pearls">0</span><small>パール</small></div><div class="balance"><span id="coins">0</span><small>コイン</small></div></section>
+    <nav class="tabs"><button class="tab active" data-tab="tasks">今日</button><button class="tab" data-tab="character">キャラ</button><button class="tab" data-tab="reflect">ふりかえり</button><button class="tab" data-tab="growth">成長</button><button class="tab" data-tab="settings">設定</button></nav>
+    <section id="tasks" class="screen active"><div class="heading"><h2>今日のミッション</h2><p id="todayLabel"></p></div><div id="taskList" class="task-list"></div></section>
+    <section id="character" class="screen"><div class="heading"><h2>キャラクター設定</h2><p>今いっしょに冒険したいマーメイドを選びます。</p></div><div id="mermaidList" class="grid"></div></section>
+    <section id="reflect" class="screen"><div class="heading"><h2>今日のふりかえり</h2><p>三方よしで、今日のがんばりを意味づけます。</p></div><div class="reflect"><div class="badge" id="reflectionCharacter">クラゲ博士</div><p id="reflectionText"></p></div><button class="primary" id="finishDayButton">今日をおしまいにする</button></section>
+    <section id="growth" class="screen"><div class="heading"><h2>成長グラフ</h2><p>伸びている力を見える化します。</p></div><div id="growthList" class="growth"></div><h3>コイン精算</h3><div class="settle card"><div><small>今週コイン</small><strong id="weeklyCoins">0</strong></div><div><small>受け取る金額</small><strong id="yenAmount">0円</strong></div><div><small>貯金コイン</small><strong id="savedCoins">0</strong></div></div><div class="actions"><button class="primary" id="cashOutButton">今週もらう</button><button class="secondary" id="saveCoinButton">月末まで貯める</button></div></section>
+    <section id="settings" class="screen"><div class="heading"><h2>親設定</h2><p>タスク追加とバックアップができます。</p></div><form id="taskForm" class="form"><label>タスク名<input name="name" required placeholder="例：ピアノ練習"></label><label>曜日<select name="day"><option>毎日</option><option>月</option><option>火</option><option>水</option><option>木</option><option>金</option><option>土</option><option>日</option></select></label><label>開始時間<input name="time" type="time" value="17:00"></label><label>成長カテゴリ<select name="category"><option>習慣力</option><option>思いやり</option><option>ひらめき</option><option>考える力</option><option>ふりかえり力</option><option>継続力</option><option>夢を描く力</option></select></label><label>担当キャラ<select name="character"><option>タコ先生</option><option>リッキー</option><option>フィーナ</option><option>クラゲ博士</option><option>お母さん</option><option>お父さん</option><option>王子様ノア</option></select></label><div class="rewards"><label>ライフpt<input name="life" type="number" value="10"></label><label>パール<input name="pearl" type="number" value="5"></label><label>コイン<input name="coin" type="number" value="1"></label></div><button class="primary">タスクを追加</button></form><div class="backup"><h3>バックアップ</h3><p>記録をファイルに保存できます。保存したファイルはSDカードや外付けメモリーへ移せます。</p><div class="actions"><button class="secondary" id="exportButton">バックアップ保存</button><label class="filebtn">バックアップ読込<input id="importFile" type="file" accept="application/json,.json"></label></div></div><button class="danger" id="resetButton">試作データをリセット</button></section>
+  </main>
+</div>
+<dialog id="rewardDialog" class="dialog"><h2 id="rewardTitle">ミッションクリア！</h2><p id="rewardMessage"></p><div id="rewardValues" class="reward-row"></div><button class="primary" id="closeDialog">次へ</button></dialog>
+<script>
+const KEY="sampoYoshiMermaidV1",days=["日","月","火","水","木","金","土"],cats=["思いやり","ひらめき","習慣力","考える力","ふりかえり力","継続力","夢を描く力"];
+const mermaids=[["miina","ミーナ","協調のマーメイド","思いやり","みんなを助けるやさしい力","あなたのおかげで、みんなが助かったよ。"],["luna","ルナ","ひらめきのマーメイド","ひらめき","楽しくひらめく自由な力","そのひらめき、すごく素敵！"],["leefa","リーファ","積み重ねのマーメイド","習慣力","毎日つづける確かな力","順番にできたね。確実に力になっているよ。"],["selena","セレナ","知恵のマーメイド","考える力","未来を考える知恵の力","その考え方、未来につながっているね。"]];
+const baseTasks=[["homework","宿題",["月","火","水","木","金"],"17:00",30,"習慣力","タコ先生",10,5,1],["prepare","明日の準備",["毎日"],"20:00",10,"習慣力","リッキー",5,3,1],["help","お手伝い",["毎日"],"18:30",10,"思いやり","お母さん",10,5,1],["lesson","習い事の練習",["火","木"],"18:00",20,"ひらめき","フィーナ",15,8,1],["reading","読書",["月","水","金"],"19:30",15,"考える力","タコ先生",10,5,1],["reflect","ふりかえり",["毎日"],"20:30",5,"ふりかえり力","クラゲ博士",5,3,0]].map(t=>({id:t[0],name:t[1],days:t[2],time:t[3],minutes:t[4],category:t[5],character:t[6],life:t[7],pearl:t[8],coin:t[9]}));
+const advice={"習慣力":["タコ先生","今日のコツコツは、自分の力になって、家族も安心できて、明日の自分を助けてくれるよ。"],"思いやり":["お母さん","手伝ってくれてありがとう。自分のやさしさが育って、家族の時間もあたたかくなったね。"],"ひらめき":["フィーナ","チャレンジしたことがすごいよ。自分の勇気が育って、未来の楽しみも増えたね。"],"考える力":["タコ先生","考えた時間は、自分の力になって、明日の学びにもつながるよ。"],"ふりかえり力":["クラゲ博士","今日をふりかえれたことが、自分にも、家族にも、未来にもよい光をくれたね。"],"継続力":["お父さん","続けられたことは大きな力だよ。今の自分にも未来の自分にもつながっているね。"],"夢を描く力":["王子様ノア","君の努力が、海の世界をまた輝かせたね。夢に近づく一歩になったよ。"]};
+let state=JSON.parse(localStorage.getItem(KEY)||"null")||{child:{mermaid:"luna",life:0,pearl:0,coin:0,weeklyCoin:0,savedCoin:0,streak:0,lastFinished:""},tasks:baseTasks,done:[],settles:[]};
+const $=id=>document.getElementById(id),today=()=>new Date().toISOString().slice(0,10),save=()=>localStorage.setItem(KEY,JSON.stringify(state)),sel=()=>mermaids.find(m=>m[0]===state.child.mermaid)||mermaids[1],todayTasks=()=>{let d=days[new Date().getDay()];return state.tasks.filter(t=>t.days.includes("毎日")||t.days.includes(d)).sort((a,b)=>a.time.localeCompare(b.time))},doneToday=()=>state.done.filter(d=>d.date===today()),isDone=id=>doneToday().some(d=>d.id===id);
+function mermaidFig(cls){return `<div class="mermaid ${cls}"><div class="hair"></div><div class="face"></div><div class="eye l"></div><div class="eye r"></div><div class="smile"></div><div class="body"></div><div class="tail"></div><div class="fin"></div></div>`}
+function complete(id){let t=state.tasks.find(x=>x.id===id);if(!t||isDone(id))return;state.done.push({id:t.id,name:t.name,date:today(),category:t.category,character:t.character,life:t.life,pearl:t.pearl,coin:t.coin});state.child.life+=t.life;state.child.pearl+=t.pearl;state.child.coin+=t.coin;state.child.weeklyCoin+=t.coin;save();showReward(t);render()}
+function showReward(t){let m=sel(),a=advice[t.category]||["",m[5]];$("rewardTitle").textContent=t.name+"クリア！";$("rewardMessage").textContent=m[1]+"："+m[5]+"\\n"+t.character+"："+a[1];$("rewardValues").innerHTML=`<div>${t.life}<br><small>ライフpt</small></div><div>${t.pearl}<br><small>パール</small></div><div>${t.coin}<br><small>コイン</small></div>`;$("rewardDialog").showModal()}
+function render(){let m=sel(),ts=todayTasks(),dn=doneToday(),up=ts.find(t=>!isDone(t.id));$("heroMermaid").className="mermaid hero-m "+m[0];$("heroMermaid").innerHTML='<div class="hair"></div><div class="face"></div><div class="eye l"></div><div class="eye r"></div><div class="smile"></div><div class="body"></div><div class="tail"></div><div class="fin"></div>';$("heroName").textContent=m[1]+"｜"+m[4];$("todayDone").textContent=dn.length+"/"+ts.length;$("streakDays").textContent=state.child.streak+"日";$("nextTask").textContent=up?up.time:"完了";$("todayLabel").textContent=today().replaceAll("-","/")+" "+days[new Date().getDay()]+"曜日";$("lifePt").textContent=state.child.life;$("pearls").textContent=state.child.pearl;$("coins").textContent=state.child.coin;$("weeklyCoins").textContent=state.child.weeklyCoin;$("savedCoins").textContent=state.child.savedCoin;$("yenAmount").textContent=state.child.weeklyCoin*10+"円";
+$("taskList").innerHTML=ts.map(t=>`<article class="task ${isDone(t.id)?"done":""}"><div><h3>${t.name}</h3><div class="meta"><span class="pill">${t.time}</span><span class="pill">${t.minutes}分</span><span class="pill">${t.category}</span><span class="pill">${t.character}</span><span class="pill">${t.life}pt/${t.pearl}P/${t.coin}C</span></div></div><button class="primary" ${isDone(t.id)?"disabled":""} data-task="${t.id}">${isDone(t.id)?"達成済み":"できた！"}</button></article>`).join("");
+$("mermaidList").innerHTML=mermaids.map(x=>`<article class="card ${state.child.mermaid===x[0]?"selected":""}"><div class="top">${mermaidFig(x[0])}<div><h3>${x[1]}</h3><small>${x[2]}</small></div></div><p>${x[4]}</p><p>${x[5]}</p><button class="secondary" data-mermaid="${x[0]}">${state.child.mermaid===x[0]?"選択中":"この子にする"}</button></article>`).join("");
+let cat=dn.length?Object.entries(dn.reduce((o,d)=>(o[d.category]=(o[d.category]||0)+1,o),{})).sort((a,b)=>b[1]-a[1])[0][0]:m[3],ad=advice[cat]||[m[1],m[5]];$("reflectionCharacter").textContent=dn.length?ad[0]:m[1];$("reflectionText").textContent=dn.length?ad[1]:m[5];let counts=Object.fromEntries(cats.map(c=>[c,0]));state.done.forEach(d=>counts[d.category]=(counts[d.category]||0)+1);let max=Math.max(1,...Object.values(counts));$("growthList").innerHTML=cats.map(c=>`<div class="row"><strong>${c}</strong><div class="bar"><div class="fill" style="width:${Math.max(5,Math.round(counts[c]/max*100))}%"></div></div><span>${counts[c]}</span></div>`).join("")}
+document.addEventListener("click",e=>{let t=e.target.closest("[data-task]");if(t)complete(t.dataset.task);let m=e.target.closest("[data-mermaid]");if(m){state.child.mermaid=m.dataset.mermaid;save();render()}});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===b.dataset.tab))});
+$("closeDialog").onclick=()=>$("rewardDialog").close();$("finishDayButton").onclick=()=>{let dn=doneToday().length;if(dn&&state.child.lastFinished!==today()){state.child.streak=dn>=Math.ceil(todayTasks().length*.7)?state.child.streak+1:0;state.child.lastFinished=today();save();render()}};$("taskForm").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target);state.tasks.push({id:"task"+Date.now(),name:f.get("name"),days:[f.get("day")],time:f.get("time"),minutes:10,category:f.get("category"),character:f.get("character"),life:+f.get("life"),pearl:+f.get("pearl"),coin:+f.get("coin")});save();e.target.reset();render()};$("cashOutButton").onclick=()=>{state.child.coin-=state.child.weeklyCoin;state.child.weeklyCoin=0;save();render()};$("saveCoinButton").onclick=()=>{state.child.savedCoin+=state.child.weeklyCoin;state.child.weeklyCoin=0;save();render()};$("resetButton").onclick=()=>{if(confirm("リセットしますか？")){localStorage.removeItem(KEY);location.reload()}};$("exportButton").onclick=()=>{let a=document.createElement("a"),b=new Blob([JSON.stringify({state},null,2)],{type:"application/json"});a.href=URL.createObjectURL(b);a.download="mermaid-backup-"+today()+".json";a.click()};$("importFile").onchange=e=>{let file=e.target.files[0];if(!file)return;let r=new FileReader();r.onload=()=>{try{let p=JSON.parse(r.result);if(p.state){state=p.state;save();render();alert("読み込みました")}}catch{alert("読み込めませんでした")}};r.readAsText(file)};render();
+</script>
+</body>
 </html>
